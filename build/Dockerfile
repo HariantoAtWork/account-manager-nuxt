@@ -1,8 +1,9 @@
+##### Build
 # Use an official Node runtime as the base image
-FROM node:18
+FROM node:20.16-alpine as builder
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /build
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -16,8 +17,20 @@ COPY . .
 # Build the Nuxt app
 RUN npm run build
 
-# Expose the port the app runs on
+
+##### Deploy
+FROM node:20.16-alpine
+
 EXPOSE 3000
 
-# Define the command to run the app
-CMD [ "npm", "run", "start" ]
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV NODE_WORKDIR=/app
+WORKDIR $NODE_WORKDIR
+
+# COPY package.json $NODE_WORKDIR/
+# RUN npm shrinkwrap
+# RUN npm i
+COPY --from=builder /build/.output $NODE_WORKDIR
+
+CMD ["node", "server/index.mjs"]

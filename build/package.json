@@ -4,10 +4,16 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "build-run": "nuxt build && node .output/server/index.mjs",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "docker": "nuxt dev",
+    "docker-build": "./docker-deploy.sh docker-build",
+    "docker-run": "./docker-deploy.sh docker-run",
+    "docker-build-run": "./docker-deploy.sh docker-build-run",
+    "docker-push": "./docker-deploy.sh docker-push"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
